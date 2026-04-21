@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu de navegação - 1 2 3</title>
+    <title>Calculadora Científica</title>
     <style>
-        /* Reset básico */
         * {
             margin: 0;
             padding: 0;
@@ -14,68 +13,399 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f0f2f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        /* Classe do menu */
-        .menu-navegacao {
-            background: #ffffff;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 0.5rem 1rem;
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
         }
 
-        /* Combinador: lista dentro da classe .menu-navegacao */
-        .menu-navegacao ul {
-            list-style: none;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        /* Combinador: itens da lista */
-        .menu-navegacao li {
-            margin: 0;
-        }
-
-        /* Links no estado normal */
-        .menu-navegacao a {
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-            background: #ecf0f1;
-            padding: 0.75rem 1.5rem;
-            border-radius: 40px;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        /* Efeito hover (quando passar o mouse) */
-        .menu-navegacao a:hover {
-            background: #3498db;
+        .display {
+            background: #1e293b;
             color: white;
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
         }
 
-        /* Opcional: foco para acessibilidade */
-        .menu-navegacao a:focus {
-            outline: 2px solid #2980b9;
-            outline-offset: 2px;
+        .previous-operand {
+            color: #94a3b8;
+            font-size: 1rem;
+            min-height: 24px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .current-operand {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #1e293b;
+        }
+
+        button:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .operator {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .operator:hover {
+            background: #d97706;
+        }
+
+        .equals {
+            background: #10b981;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .equals:hover {
+            background: #059669;
+        }
+
+        .clear {
+            background: #ef4444;
+            color: white;
+        }
+
+        .clear:hover {
+            background: #dc2626;
+        }
+
+        .delete {
+            background: #64748b;
+            color: white;
+        }
+
+        .delete:hover {
+            background: #475569;
+        }
+
+        .scientific {
+            background: #8b5cf6;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .scientific:hover {
+            background: #7c3aed;
+        }
+
+        @media (max-width: 480px) {
+            .calculator {
+                padding: 15px;
+            }
+            
+            button {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .current-operand {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="menu-navegacao">
-        <ul>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-        </ul>
-    </nav>
+    <div class="calculator">
+        <div class="display">
+            <div class="previous-operand" id="previousOperand"></div>
+            <div class="current-operand" id="currentOperand">0</div>
+        </div>
+        <div class="buttons">
+            <button class="clear">C</button>
+            <button class="delete">⌫</button>
+            <button class="scientific" data-action="sqrt">√</button>
+            <button class="operator">/</button>
+            
+            <button data-number>7</button>
+            <button data-number>8</button>
+            <button data-number>9</button>
+            <button class="operator">*</button>
+            
+            <button data-number>4</button>
+            <button data-number>5</button>
+            <button data-number>6</button>
+            <button class="operator">-</button>
+            
+            <button data-number>1</button>
+            <button data-number>2</button>
+            <button data-number>3</button>
+            <button class="operator">+</button>
+            
+            <button class="scientific" data-action="sin">sin</button>
+            <button data-number>0</button>
+            <button data-number>.</button>
+            <button class="equals">=</button>
+            
+            <button class="scientific" data-action="cos">cos</button>
+            <button class="scientific" data-action="tan">tan</button>
+            <button class="scientific" data-action="pow">x²</button>
+            <button class="scientific" data-action="percent">%</button>
+        </div>
+    </div>
+
+    <script>
+        class Calculator {
+            constructor(previousOperandElement, currentOperandElement) {
+                this.previousOperandElement = previousOperandElement;
+                this.currentOperandElement = currentOperandElement;
+                this.clear();
+            }
+
+            clear() {
+                this.currentOperand = '0';
+                this.previousOperand = '';
+                this.operation = undefined;
+            }
+
+            delete() {
+                if (this.currentOperand === '0') return;
+                if (this.currentOperand.length === 1) {
+                    this.currentOperand = '0';
+                } else {
+                    this.currentOperand = this.currentOperand.slice(0, -1);
+                }
+            }
+
+            appendNumber(number) {
+                if (number === '.' && this.currentOperand.includes('.')) return;
+                if (this.currentOperand === '0' && number !== '.') {
+                    this.currentOperand = number;
+                } else {
+                    this.currentOperand += number;
+                }
+            }
+
+            chooseOperation(operation) {
+                if (this.currentOperand === '') return;
+                if (this.previousOperand !== '') {
+                    this.compute();
+                }
+                this.operation = operation;
+                this.previousOperand = this.currentOperand;
+                this.currentOperand = '0';
+            }
+
+            compute() {
+                let computation;
+                const prev = parseFloat(this.previousOperand);
+                const current = parseFloat(this.currentOperand);
+                
+                if (isNaN(prev) || isNaN(current)) return;
+                
+                switch (this.operation) {
+                    case '+':
+                        computation = prev + current;
+                        break;
+                    case '-':
+                        computation = prev - current;
+                        break;
+                    case '*':
+                        computation = prev * current;
+                        break;
+                    case '/':
+                        if (current === 0) {
+                            alert("Não é possível dividir por zero!");
+                            return;
+                        }
+                        computation = prev / current;
+                        break;
+                    default:
+                        return;
+                }
+                
+                this.currentOperand = computation.toString();
+                this.operation = undefined;
+                this.previousOperand = '';
+            }
+
+            updateDisplay() {
+                this.currentOperandElement.innerText = this.currentOperand;
+                if (this.operation != null) {
+                    this.previousOperandElement.innerText = `${this.previousOperand} ${this.operation}`;
+                } else {
+                    this.previousOperandElement.innerText = '';
+                }
+            }
+
+            // Funções científicas
+            squareRoot() {
+                const value = parseFloat(this.currentOperand);
+                if (value < 0) {
+                    alert("Não é possível calcular raiz quadrada de número negativo!");
+                    return;
+                }
+                this.currentOperand = Math.sqrt(value).toString();
+                this.updateDisplay();
+            }
+
+            square() {
+                const value = parseFloat(this.currentOperand);
+                this.currentOperand = (value * value).toString();
+                this.updateDisplay();
+            }
+
+            sin() {
+                const value = parseFloat(this.currentOperand);
+                this.currentOperand = Math.sin(value * Math.PI / 180).toString();
+                this.updateDisplay();
+            }
+
+            cos() {
+                const value = parseFloat(this.currentOperand);
+                this.currentOperand = Math.cos(value * Math.PI / 180).toString();
+                this.updateDisplay();
+            }
+
+            tan() {
+                const value = parseFloat(this.currentOperand);
+                const tanValue = Math.tan(value * Math.PI / 180);
+                if (Math.abs(tanValue) > 1000000) {
+                    alert("Valor muito grande ou indefinido!");
+                    return;
+                }
+                this.currentOperand = tanValue.toString();
+                this.updateDisplay();
+            }
+
+            percent() {
+                const value = parseFloat(this.currentOperand);
+                this.currentOperand = (value / 100).toString();
+                this.updateDisplay();
+            }
+        }
+
+        // Inicialização da calculadora
+        const previousOperandElement = document.getElementById('previousOperand');
+        const currentOperandElement = document.getElementById('currentOperand');
+        const calculator = new Calculator(previousOperandElement, currentOperandElement);
+
+        // Event listeners para números
+        document.querySelectorAll('[data-number]').forEach(button => {
+            button.addEventListener('click', () => {
+                calculator.appendNumber(button.innerText);
+                calculator.updateDisplay();
+            });
+        });
+
+        // Event listeners para operadores
+        document.querySelectorAll('.operator').forEach(button => {
+            button.addEventListener('click', () => {
+                calculator.chooseOperation(button.innerText);
+                calculator.updateDisplay();
+            });
+        });
+
+        // Event listener para igual
+        document.querySelector('.equals').addEventListener('click', () => {
+            calculator.compute();
+            calculator.updateDisplay();
+        });
+
+        // Event listener para clear
+        document.querySelector('.clear').addEventListener('click', () => {
+            calculator.clear();
+            calculator.updateDisplay();
+        });
+
+        // Event listener para delete
+        document.querySelector('.delete').addEventListener('click', () => {
+            calculator.delete();
+            calculator.updateDisplay();
+        });
+
+        // Event listeners para funções científicas
+        document.querySelectorAll('.scientific').forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.getAttribute('data-action');
+                switch(action) {
+                    case 'sqrt':
+                        calculator.squareRoot();
+                        break;
+                    case 'pow':
+                        calculator.square();
+                        break;
+                    case 'sin':
+                        calculator.sin();
+                        break;
+                    case 'cos':
+                        calculator.cos();
+                        break;
+                    case 'tan':
+                        calculator.tan();
+                        break;
+                    case 'percent':
+                        calculator.percent();
+                        break;
+                }
+            });
+        });
+
+        // Suporte para teclado
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9') {
+                calculator.appendNumber(key);
+                calculator.updateDisplay();
+            } else if (key === '.') {
+                calculator.appendNumber(key);
+                calculator.updateDisplay();
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                calculator.chooseOperation(key);
+                calculator.updateDisplay();
+            } else if (key === 'Enter' || key === '=') {
+                calculator.compute();
+                calculator.updateDisplay();
+            } else if (key === 'Escape' || key === 'c' || key === 'C') {
+                calculator.clear();
+                calculator.updateDisplay();
+            } else if (key === 'Backspace') {
+                calculator.delete();
+                calculator.updateDisplay();
+            }
+        });
+    </script>
 </body>
 </html>
